@@ -1,0 +1,19 @@
+#Tue Jan 20 21:39:00 FJT 2026
+base.0=E\:\\_APP Development\\_Projects\\Hard Reminder App\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=E\:\\_APP Development\\_Projects\\Hard Reminder App\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.2=E\:\\_APP Development\\_Projects\\Hard Reminder App\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\7\\classes.dex
+base.3=E\:\\_APP Development\\_Projects\\Hard Reminder App\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\8\\classes.dex
+base.4=E\:\\_APP Development\\_Projects\\Hard Reminder App\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex
+base.5=E\:\\_APP Development\\_Projects\\Hard Reminder App\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes3.dex
+path.0=classes.dex
+path.1=0/classes.dex
+path.2=7/classes.dex
+path.3=8/classes.dex
+path.4=classes2.dex
+path.5=classes3.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex
+renamed.2=classes3.dex
+renamed.3=classes4.dex
+renamed.4=classes5.dex
+renamed.5=classes6.dex

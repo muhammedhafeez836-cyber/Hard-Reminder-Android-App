@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Hard Reminder</string>
+    <string name="channel_alarm_name">Hard Reminders</string>
+    <string name="channel_alarm_description">Hard alarm notifications for reminders</string>
+</resources>
