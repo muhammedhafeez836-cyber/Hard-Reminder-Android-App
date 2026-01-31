@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.hardreminder.app.HardReminderApp
 import com.hardreminder.app.data.ReminderEntity
+import com.hardreminder.app.alarm.AlarmRingerService
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,6 +32,10 @@ class ReminderDetailViewModel(application: Application) : AndroidViewModel(appli
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
+    val ringingCount: StateFlow<Int> = repo.observeRinging()
+        .map { ringing -> ringing.size }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
+
     fun loadReminder(reminderId: Long) {
         reminderIdFlow.value = reminderId
     }
@@ -39,7 +45,21 @@ class ReminderDetailViewModel(application: Application) : AndroidViewModel(appli
         viewModelScope.launch {
             repo.deleteReminder(current)
             alarmScheduler.cancelAlarm(current.id)
+            repo.clearRinging(current.id)
+            AlarmRingerService.requestStopIfNoRinging(getApplication())
             onDone()
+        }
+    }
+
+    fun snooze(minutes: Int) {
+        val current = reminder.value ?: return
+        viewModelScope.launch {
+            val now = System.currentTimeMillis()
+            val nextAt = now + minutes * 60_000L
+            repo.snoozeReminder(current.id, nextAt, now)
+            alarmScheduler.scheduleAlarm(current.id, nextAt)
+            AlarmRingerService.requestRefresh(getApplication())
+            AlarmRingerService.requestStopIfNoRinging(getApplication())
         }
     }
 }

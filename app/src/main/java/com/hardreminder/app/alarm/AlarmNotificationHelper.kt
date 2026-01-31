@@ -10,6 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.hardreminder.app.R
 import com.hardreminder.app.ui.AlarmActivity
+import com.hardreminder.app.ui.MainActivity
 
 object AlarmNotificationHelper {
     const val CHANNEL_ID = "hard_reminder_alarm"
@@ -29,8 +30,10 @@ object AlarmNotificationHelper {
         }
     }
 
-    fun buildNotification(context: Context, titles: List<String>): Notification {
-        val reminderCount = titles.size
+    data class NotificationReminder(val id: Long, val title: String)
+
+    fun buildNotification(context: Context, reminders: List<NotificationReminder>): Notification {
+        val reminderCount = reminders.size
         val alarmIntent = Intent(context, AlarmActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra(AlarmActivity.EXTRA_OPEN_SNOOZE_PICKER, reminderCount == 1)
@@ -49,12 +52,27 @@ object AlarmNotificationHelper {
         } else {
             "Reminder due"
         }
-        val contentText = buildContentText(titles)
+        val contentText = buildContentText(reminders.map { it.title })
+
+        val contentIntent = if (reminderCount == 1) {
+            PendingIntent.getActivity(
+                context,
+                2,
+                Intent(context, MainActivity::class.java).apply {
+                    putExtra(MainActivity.EXTRA_REMINDER_ID, reminders.first().id)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                },
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            fullScreenIntent
+        }
 
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(title)
             .setContentText(contentText)
+            .setContentIntent(contentIntent)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)

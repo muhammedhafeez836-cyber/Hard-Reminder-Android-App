@@ -22,6 +22,15 @@ object Routes {
 
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController()) {
+    val safeBack: () -> Unit = {
+        val popped = navController.popBackStack()
+        if (!popped) {
+            navController.navigate(Routes.HOME) {
+                popUpTo(Routes.HOME) { inclusive = false }
+                launchSingleTop = true
+            }
+        }
+    }
     NavHost(navController = navController, startDestination = Routes.HOME) {
         composable(Routes.HOME) {
             val viewModel: HomeViewModel = viewModel()
@@ -68,11 +77,11 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
             )
         }
         composable(Routes.BATTERY) {
-            BatteryOptimizationScreen(onBack = { navController.popBackStack() })
+            BatteryOptimizationScreen(onBack = safeBack)
         }
         composable(Routes.SETTINGS) {
             SettingsHubScreen(
-                onBack = { navController.popBackStack() },
+                onBack = safeBack,
                 onSnooze = { navController.navigate(Routes.SNOOZE_SETTINGS) },
                 onTone = { navController.navigate(Routes.TONE_SETTINGS) },
                 onBattery = { navController.navigate(Routes.BATTERY) }
@@ -80,11 +89,11 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         }
         composable(Routes.SNOOZE_SETTINGS) {
             val viewModel: SettingsViewModel = viewModel()
-            SnoozeSettingsScreen(viewModel = viewModel, onBack = { navController.popBackStack() })
+            SnoozeSettingsScreen(viewModel = viewModel, onBack = safeBack)
         }
         composable(Routes.TONE_SETTINGS) {
             val viewModel: SettingsViewModel = viewModel()
-            ToneSettingsScreen(viewModel = viewModel, onBack = { navController.popBackStack() })
+            ToneSettingsScreen(viewModel = viewModel, onBack = safeBack)
         }
     }
 }

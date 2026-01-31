@@ -70,7 +70,7 @@ class AlarmRingerService : Service() {
             startAlarmPlayback()
             val notification = AlarmNotificationHelper.buildNotification(
                 this,
-                ringing.map { it.title }
+                ringing.map { AlarmNotificationHelper.NotificationReminder(it.id, it.title) }
             )
             startForeground(NOTIFICATION_ID, notification)
         }
@@ -82,7 +82,7 @@ class AlarmRingerService : Service() {
         if (ringing.isNotEmpty()) {
             val notification = AlarmNotificationHelper.buildNotification(
                 this,
-                ringing.map { it.title }
+                ringing.map { AlarmNotificationHelper.NotificationReminder(it.id, it.title) }
             )
             startForeground(NOTIFICATION_ID, notification)
         }
