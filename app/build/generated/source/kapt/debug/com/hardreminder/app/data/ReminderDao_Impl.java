@@ -317,6 +317,136 @@ public final class ReminderDao_Impl implements ReminderDao {
   }
 
   @Override
+  public Flow<List<ReminderEntity>> observeBetween(final long startMillis, final long endMillis) {
+    final String _sql = "SELECT * FROM reminders WHERE scheduledAtMillis BETWEEN ? AND ? ORDER BY scheduledAtMillis ASC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, startMillis);
+    _argIndex = 2;
+    _statement.bindLong(_argIndex, endMillis);
+    return CoroutinesRoom.createFlow(__db, false, new String[] {"reminders"}, new Callable<List<ReminderEntity>>() {
+      @Override
+      @NonNull
+      public List<ReminderEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfTitle = CursorUtil.getColumnIndexOrThrow(_cursor, "title");
+          final int _cursorIndexOfDetails = CursorUtil.getColumnIndexOrThrow(_cursor, "details");
+          final int _cursorIndexOfScheduledAtMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "scheduledAtMillis");
+          final int _cursorIndexOfCreatedAtMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAtMillis");
+          final int _cursorIndexOfUpdatedAtMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAtMillis");
+          final int _cursorIndexOfSnoozeCount = CursorUtil.getColumnIndexOrThrow(_cursor, "snoozeCount");
+          final int _cursorIndexOfIsRinging = CursorUtil.getColumnIndexOrThrow(_cursor, "isRinging");
+          final List<ReminderEntity> _result = new ArrayList<ReminderEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final ReminderEntity _item;
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpTitle;
+            if (_cursor.isNull(_cursorIndexOfTitle)) {
+              _tmpTitle = null;
+            } else {
+              _tmpTitle = _cursor.getString(_cursorIndexOfTitle);
+            }
+            final String _tmpDetails;
+            if (_cursor.isNull(_cursorIndexOfDetails)) {
+              _tmpDetails = null;
+            } else {
+              _tmpDetails = _cursor.getString(_cursorIndexOfDetails);
+            }
+            final long _tmpScheduledAtMillis;
+            _tmpScheduledAtMillis = _cursor.getLong(_cursorIndexOfScheduledAtMillis);
+            final long _tmpCreatedAtMillis;
+            _tmpCreatedAtMillis = _cursor.getLong(_cursorIndexOfCreatedAtMillis);
+            final long _tmpUpdatedAtMillis;
+            _tmpUpdatedAtMillis = _cursor.getLong(_cursorIndexOfUpdatedAtMillis);
+            final int _tmpSnoozeCount;
+            _tmpSnoozeCount = _cursor.getInt(_cursorIndexOfSnoozeCount);
+            final boolean _tmpIsRinging;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfIsRinging);
+            _tmpIsRinging = _tmp != 0;
+            _item = new ReminderEntity(_tmpId,_tmpTitle,_tmpDetails,_tmpScheduledAtMillis,_tmpCreatedAtMillis,_tmpUpdatedAtMillis,_tmpSnoozeCount,_tmpIsRinging);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
+  @Override
+  public Flow<List<ReminderEntity>> observeAll() {
+    final String _sql = "SELECT * FROM reminders ORDER BY scheduledAtMillis ASC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    return CoroutinesRoom.createFlow(__db, false, new String[] {"reminders"}, new Callable<List<ReminderEntity>>() {
+      @Override
+      @NonNull
+      public List<ReminderEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfTitle = CursorUtil.getColumnIndexOrThrow(_cursor, "title");
+          final int _cursorIndexOfDetails = CursorUtil.getColumnIndexOrThrow(_cursor, "details");
+          final int _cursorIndexOfScheduledAtMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "scheduledAtMillis");
+          final int _cursorIndexOfCreatedAtMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAtMillis");
+          final int _cursorIndexOfUpdatedAtMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAtMillis");
+          final int _cursorIndexOfSnoozeCount = CursorUtil.getColumnIndexOrThrow(_cursor, "snoozeCount");
+          final int _cursorIndexOfIsRinging = CursorUtil.getColumnIndexOrThrow(_cursor, "isRinging");
+          final List<ReminderEntity> _result = new ArrayList<ReminderEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final ReminderEntity _item;
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpTitle;
+            if (_cursor.isNull(_cursorIndexOfTitle)) {
+              _tmpTitle = null;
+            } else {
+              _tmpTitle = _cursor.getString(_cursorIndexOfTitle);
+            }
+            final String _tmpDetails;
+            if (_cursor.isNull(_cursorIndexOfDetails)) {
+              _tmpDetails = null;
+            } else {
+              _tmpDetails = _cursor.getString(_cursorIndexOfDetails);
+            }
+            final long _tmpScheduledAtMillis;
+            _tmpScheduledAtMillis = _cursor.getLong(_cursorIndexOfScheduledAtMillis);
+            final long _tmpCreatedAtMillis;
+            _tmpCreatedAtMillis = _cursor.getLong(_cursorIndexOfCreatedAtMillis);
+            final long _tmpUpdatedAtMillis;
+            _tmpUpdatedAtMillis = _cursor.getLong(_cursorIndexOfUpdatedAtMillis);
+            final int _tmpSnoozeCount;
+            _tmpSnoozeCount = _cursor.getInt(_cursorIndexOfSnoozeCount);
+            final boolean _tmpIsRinging;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfIsRinging);
+            _tmpIsRinging = _tmp != 0;
+            _item = new ReminderEntity(_tmpId,_tmpTitle,_tmpDetails,_tmpScheduledAtMillis,_tmpCreatedAtMillis,_tmpUpdatedAtMillis,_tmpSnoozeCount,_tmpIsRinging);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
+  @Override
   public Flow<List<ReminderEntity>> observeRingingReminders() {
     final String _sql = "SELECT * FROM reminders WHERE isRinging = 1 ORDER BY scheduledAtMillis ASC";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);

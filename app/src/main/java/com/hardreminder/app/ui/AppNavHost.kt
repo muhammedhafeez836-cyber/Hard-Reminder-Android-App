@@ -14,6 +14,7 @@ object Routes {
     const val ADD = "add"
     const val EDIT = "edit"
     const val DETAIL = "detail"
+    const val SETTINGS = "settings"
     const val BATTERY = "battery"
     const val SNOOZE_SETTINGS = "snooze_settings"
     const val TONE_SETTINGS = "tone_settings"
@@ -29,8 +30,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 onAdd = { navController.navigate(Routes.ADD) },
                 onDetail = { id -> navController.navigate("${Routes.DETAIL}/$id") },
                 onBattery = { navController.navigate(Routes.BATTERY) },
-                onSnoozeSettings = { navController.navigate(Routes.SNOOZE_SETTINGS) },
-                onToneSettings = { navController.navigate(Routes.TONE_SETTINGS) }
+                onSettings = { navController.navigate(Routes.SETTINGS) }
             )
         }
         composable(Routes.ADD) {
@@ -69,6 +69,14 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
         }
         composable(Routes.BATTERY) {
             BatteryOptimizationScreen(onBack = { navController.popBackStack() })
+        }
+        composable(Routes.SETTINGS) {
+            SettingsHubScreen(
+                onBack = { navController.popBackStack() },
+                onSnooze = { navController.navigate(Routes.SNOOZE_SETTINGS) },
+                onTone = { navController.navigate(Routes.TONE_SETTINGS) },
+                onBattery = { navController.navigate(Routes.BATTERY) }
+            )
         }
         composable(Routes.SNOOZE_SETTINGS) {
             val viewModel: SettingsViewModel = viewModel()

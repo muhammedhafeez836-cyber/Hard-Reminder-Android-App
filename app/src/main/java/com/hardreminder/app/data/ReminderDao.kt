@@ -13,6 +13,12 @@ interface ReminderDao {
     @Query("SELECT * FROM reminders WHERE scheduledAtMillis >= :nowMillis AND isRinging = 0 ORDER BY scheduledAtMillis ASC")
     fun observeUpcoming(nowMillis: Long): Flow<List<ReminderEntity>>
 
+    @Query("SELECT * FROM reminders WHERE scheduledAtMillis BETWEEN :startMillis AND :endMillis ORDER BY scheduledAtMillis ASC")
+    fun observeBetween(startMillis: Long, endMillis: Long): Flow<List<ReminderEntity>>
+
+    @Query("SELECT * FROM reminders ORDER BY scheduledAtMillis ASC")
+    fun observeAll(): Flow<List<ReminderEntity>>
+
     @Query("SELECT * FROM reminders WHERE isRinging = 1 ORDER BY scheduledAtMillis ASC")
     fun observeRingingReminders(): Flow<List<ReminderEntity>>
 

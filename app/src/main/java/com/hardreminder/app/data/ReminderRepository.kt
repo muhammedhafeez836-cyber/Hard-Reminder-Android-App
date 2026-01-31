@@ -5,6 +5,11 @@ import kotlinx.coroutines.flow.Flow
 class ReminderRepository(private val dao: ReminderDao) {
     fun observeUpcoming(nowMillis: Long): Flow<List<ReminderEntity>> = dao.observeUpcoming(nowMillis)
 
+    fun observeBetween(startMillis: Long, endMillis: Long): Flow<List<ReminderEntity>> =
+        dao.observeBetween(startMillis, endMillis)
+
+    fun observeAll(): Flow<List<ReminderEntity>> = dao.observeAll()
+
     fun observeRinging(): Flow<List<ReminderEntity>> = dao.observeRingingReminders()
 
     suspend fun getRingingReminders(): List<ReminderEntity> = dao.getRingingReminders()

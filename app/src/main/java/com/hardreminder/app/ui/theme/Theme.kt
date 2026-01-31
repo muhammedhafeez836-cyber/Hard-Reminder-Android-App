@@ -10,10 +10,15 @@ private val LightColors = lightColorScheme(
     onPrimary = WarmWhite,
     secondary = Mint,
     onSecondary = WarmBlack,
+    tertiary = Gold,
+    onTertiary = WarmBlack,
     background = WarmWhite,
     onBackground = WarmBlack,
     surface = WarmWhite,
     onSurface = WarmBlack,
+    surfaceVariant = Sand,
+    onSurfaceVariant = Graphite,
+    outline = Graphite.copy(alpha = 0.35f),
     error = AlarmRed,
     onError = WarmWhite
 )
@@ -23,10 +28,15 @@ private val DarkColors = darkColorScheme(
     onPrimary = WarmBlack,
     secondary = Mint,
     onSecondary = WarmBlack,
+    tertiary = Gold,
+    onTertiary = WarmBlack,
     background = WarmBlack,
     onBackground = WarmWhite,
     surface = Slate,
     onSurface = WarmWhite,
+    surfaceVariant = Graphite,
+    onSurfaceVariant = WarmWhite,
+    outline = WarmWhite.copy(alpha = 0.25f),
     error = AlarmRed,
     onError = WarmWhite
 )
