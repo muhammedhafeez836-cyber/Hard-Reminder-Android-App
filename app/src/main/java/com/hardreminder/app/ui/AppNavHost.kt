@@ -73,7 +73,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController()) {
                 viewModel = viewModel,
                 reminderId = reminderId,
                 onEdit = { navController.navigate("${Routes.EDIT}/$reminderId") },
-                onBack = { navController.popBackStack() }
+                onBack = safeBack
             )
         }
         composable(Routes.BATTERY) {
