@@ -8,6 +8,7 @@
 - Make minimal, targeted edits.
 - Prefer Compose BOM versions and existing dependency patterns.
 - Avoid experimental APIs unless explicitly opted in at call site.
+- For navigation back actions, prefer a safe back handler that falls back to `Routes.HOME`.
 
 ## Validation Phase
 - Run `./gradlew assembleDebug`.
@@ -18,4 +19,3 @@
 
 ## Stop/Ask Rules
 - Ask for JDK path before editing `gradle.properties` if unknown.
-

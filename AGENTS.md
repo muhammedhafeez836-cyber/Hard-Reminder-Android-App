@@ -29,15 +29,19 @@
 - Gradle wrapper jar mismatch causes `NoClassDefFoundError`.
   - Fix: regenerate wrapper using a local Gradle distribution.
 - JDK 24 causes `Unsupported class file major version 68`.
-  - Fix: set Gradle JDK to Android Studio JBR 17.
+  - Fix: set Gradle JDK to Android Studio JBR (17 or 21), not JDK 24.
 - Material3 theme XML missing in resources.
   - Fix: add `com.google.android.material:material` dependency.
 - Icon references fail with `Unresolved reference: ArrowBack`.
   - Fix: use `Icons.AutoMirrored.Filled.ArrowBackIos` and include `material-icons-extended`.
+- compileSdk 35 warning with older AGP versions.
+  - Fix: upgrade AGP to a version tested with SDK 35, or add `android.suppressUnsupportedCompileSdk=35` in `gradle.properties`.
+- Rapid double-back can navigate to a blank screen.
+  - Fix: use a safe back handler that falls back to `Routes.HOME` when `popBackStack()` fails.
 
 ## Verification Checklist Before Final Answers
 - `./gradlew assembleDebug` passes.
 - No unresolved references in Kotlin compile output.
-- JDK is set to JBR 17 in `gradle.properties`.
+- JDK is set to Android Studio JBR (17 or 21) in `gradle.properties`.
 - Dependencies align with BOM (no mismatched Compose versions).
 - Wrapper runs: `./gradlew --version`.

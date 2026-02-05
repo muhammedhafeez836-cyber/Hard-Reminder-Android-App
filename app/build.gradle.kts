@@ -1,19 +1,50 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
 }
 
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val hasKeystore = if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+    true
+} else {
+    System.getenv("RELEASE_STORE_FILE") != null
+}
+
 android {
     namespace = "com.hardreminder.app"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.hardreminder.app"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+    }
+
+    signingConfigs {
+        if (hasKeystore) {
+            create("release") {
+                val storeFilePath = (keystoreProperties["storeFile"] as String?)
+                    ?: System.getenv("RELEASE_STORE_FILE")
+                val storePassword = (keystoreProperties["storePassword"] as String?)
+                    ?: System.getenv("RELEASE_STORE_PASSWORD")
+                val keyAlias = (keystoreProperties["keyAlias"] as String?)
+                    ?: System.getenv("RELEASE_KEY_ALIAS")
+                val keyPassword = (keystoreProperties["keyPassword"] as String?)
+                    ?: System.getenv("RELEASE_KEY_PASSWORD")
+
+                storeFile = file(checkNotNull(storeFilePath) { "Missing release keystore file path." })
+                this.storePassword = checkNotNull(storePassword) { "Missing release keystore password." }
+                this.keyAlias = checkNotNull(keyAlias) { "Missing release key alias." }
+                this.keyPassword = checkNotNull(keyPassword) { "Missing release key password." }
+            }
+        }
     }
 
     buildTypes {
@@ -23,6 +54,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (hasKeystore) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 

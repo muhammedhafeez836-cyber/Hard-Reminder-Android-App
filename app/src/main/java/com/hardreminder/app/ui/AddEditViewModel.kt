@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.hardreminder.app.HardReminderApp
+import com.hardreminder.app.alarm.AlarmRingerService
 import com.hardreminder.app.data.ReminderEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -59,6 +60,11 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
             val id = if (reminderId != null && reminderId > 0L) {
                 val existing = repo.getReminder(reminderId)
                 if (existing != null) {
+                    if (existing.isRinging) {
+                        repo.clearRinging(reminderId)
+                        AlarmRingerService.requestStopIfNoRinging(getApplication())
+                        AlarmRingerService.requestRefresh(getApplication())
+                    }
                     val updated = existing.copy(
                         title = state.title.trim(),
                         details = state.details.trim(),

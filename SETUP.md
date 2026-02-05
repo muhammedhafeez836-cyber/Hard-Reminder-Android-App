@@ -8,3 +8,11 @@
 6) Install/run on a device and grant notification permission when prompted.
 7) Enable exact alarms if Android 12+ prompts for it.
 8) Disable battery optimizations for best reliability.
+
+# Release Build (Play Store)
+
+1) Ensure `compileSdk` and `targetSdk` meet Play requirements.
+2) Create a release keystore and store it outside source control.
+3) Create `keystore.properties` in the project root based on `keystore.properties.example`.
+4) Build a signed App Bundle with `./gradlew bundleRelease`.
+5) Upload the `.aab` from `app/build/outputs/bundle/release/` to Play Console.
